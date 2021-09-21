@@ -1,5 +1,8 @@
 package Graphics;
 
+import Algorithms.SelectionSort;
+import Algorithms.SortAlgs;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +14,10 @@ public class Application {
 
     private final ContentPanel cpanel;
     private final JPanel btnpanel;
+
+    /* Utilities */
+    private Timer timer;
+    private SortAlgs sort;
 
     /* Default variables */
     private static final int window_width = 1280;
@@ -65,8 +72,27 @@ public class Application {
         updateCPanel();
     }
 
-    private void resetVisualization()
+    /**
+     * This method iterates the Visualization of the sorting algorithm
+     * Should only be called by ActionListener through Button-Click
+     */
+    private void visualize()
     {
+        if (sort.Iterate(array))
+        {
+            timer.stop();
+        }
+    }
+
+    /**
+     * Reset Visualization
+     */
+    private void stopVisualization()
+    {
+        if (timer != null)
+        {
+            timer.stop();
+        }
         cpanel.setArrayToDisplay(array);
         updateCPanel();
     }
@@ -99,7 +125,7 @@ public class Application {
         reset_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Reset Visualization");
+                stopVisualization();
             }
         });
         c.gridx = 0;
@@ -112,16 +138,14 @@ public class Application {
         selection_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Selection Sort Started");
+                sort = new SelectionSort(cpanel);
+                timer = new Timer(500, ex -> visualize());
+                timer.setRepeats(true);
+                timer.start();
             }
         });
         c.gridx = 1;
         c.gridy = 0;
         btnpanel.add(selection_btn, c);
-    }
-
-    public int getWindow_width()
-    {
-        return window_width;
     }
 }

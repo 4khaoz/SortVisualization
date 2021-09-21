@@ -2,6 +2,9 @@ package Algorithms;
 
 import Graphics.ContentPanel;
 
+import java.awt.event.ActionEvent;
+import java.util.Arrays;
+
 
 /**
  * Selection-Sort
@@ -11,30 +14,48 @@ import Graphics.ContentPanel;
  *
  * Runtime: O(n^2)
  */
-public class SelectionSort {
+public class SelectionSort extends SortAlgs{
 
-    private int[] arrayToSort;
-
-    /**
-     * Constructor
-     * @param array to sort
-     */
-    public SelectionSort(int[] array, ContentPanel c)
+    public SelectionSort(ContentPanel c)
     {
-        arrayToSort = array;
+        cref = c;
+        cref.setSort(this);
+        iteration = 0;
     }
 
-    public int getIndexOfSmallestElement(int startIndex)
+    /**
+     * Implementation of Selection Sort as repeatable task for Timer
+     * @param array Array to sort
+     * @return true if sort finished, false to continue sort algorithm
+     */
+    public boolean Iterate(int[] array)
     {
-        int index = startIndex;
-        int minValue = arrayToSort[startIndex];
-        for (int i = startIndex; i < arrayToSort.length; i++)
+        if (iteration >= array.length)
         {
-            if (arrayToSort[i] < minValue)
+            System.out.println("Finished");
+            return true;
+        }
+        int min = array[iteration];
+        int pointer = iteration;
+
+        // TODO: Rewrite for-loop into steps to visualize the iteration steps
+        for (int i = iteration; i < array.length; i++)
+        {
+            if (array[i] < min)
             {
-                index = i;
+                min = array[i];
+                pointer = i;
             }
         }
-        return index;
+        array[pointer] = array[iteration];
+        array[iteration] = min;
+
+        iteration++;
+
+        // Update Content Panel
+        cref.setArrayToDisplay(array);
+        cref.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+
+        return false;
     }
 }
