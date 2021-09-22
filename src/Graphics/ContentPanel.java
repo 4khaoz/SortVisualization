@@ -1,6 +1,5 @@
 package Graphics;
 
-import Algorithms.SelectionSort;
 import Algorithms.SortAlgs;
 
 import javax.swing.JPanel;
@@ -11,16 +10,14 @@ import java.awt.event.ActionListener;
 public class ContentPanel extends JPanel implements ActionListener {
 
     private int[] arrayToDisplay;
-    private Application appRef;
     private SortAlgs sort;
 
 
-    public ContentPanel(Application app)
+    public ContentPanel()
     {
         setMinimumSize(new Dimension(1000, 600));
         setPreferredSize(new Dimension(1200, 600));
         setBackground(Color.GRAY);
-        appRef = app;
     }
 
     public void setArrayToDisplay(int[] array)
@@ -42,9 +39,23 @@ public class ContentPanel extends JPanel implements ActionListener {
             int offset_side = 60;
             int rect_spacing = 100;
 
-            if (sort != null && i < sort.getIteration())
+            // If Sort Visualization in Progress, set Colors
+            if (sort != null)
             {
-                g2d.setColor(Color.BLUE);
+                if (sort.isIndexSorted(i))
+                {
+                    // Sorted elements
+                    g2d.setColor(Color.BLUE);
+                }
+                else if (i == sort.getPointer())
+                {
+                    //
+                    g2d.setColor(Color.MAGENTA);
+                }
+                else if (i == sort.getSelector())
+                {
+                    g2d.setColor(Color.RED);
+                }
             }
             g2d.fillRect(
                     rect_spacing * i + offset_side,

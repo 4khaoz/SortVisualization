@@ -3,8 +3,6 @@ package Algorithms;
 import Graphics.ContentPanel;
 
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
-
 
 /**
  * Selection-Sort
@@ -16,18 +14,23 @@ import java.util.Arrays;
  */
 public class SelectionSort extends SortAlgs{
 
+    int min;
+
     public SelectionSort(ContentPanel c)
     {
-        cref = c;
+        super(c);
         cref.setSort(this);
-        iteration = 0;
+        pointer = 0;
+        selector = 0;
     }
 
     /**
-     * Implementation of Selection Sort as repeatable task for Timer
+     * Implementation of Selection Sort as a step-by-step task for Timer
+     * Each call of this function is one step of the algorithm
      * @param array Array to sort
      * @return true if sort finished, false to continue sort algorithm
      */
+    @Override
     public boolean Iterate(int[] array)
     {
         if (iteration >= array.length)
@@ -35,22 +38,32 @@ public class SelectionSort extends SortAlgs{
             System.out.println("Finished");
             return true;
         }
-        int min = array[iteration];
-        int pointer = iteration;
 
-        // TODO: Rewrite for-loop into steps to visualize the iteration steps
-        for (int i = iteration; i < array.length; i++)
+        // Start Next iteration
+        if (selector == iteration)
         {
-            if (array[i] < min)
-            {
-                min = array[i];
-                pointer = i;
-            }
+            min = array[iteration];
+            pointer = iteration;
         }
-        array[pointer] = array[iteration];
-        array[iteration] = min;
 
-        iteration++;
+        // New minimum Value found
+        if (array[selector] < min)
+        {
+            min = array[selector];
+            pointer = selector;
+        }
+
+        selector++;
+
+        // End of iteration, sort
+        if (selector >= array.length)
+        {
+            array[pointer] = array[iteration];
+            array[iteration] = min;
+            sortedIndices[iteration] = true;
+            iteration++;
+            selector = iteration;
+        }
 
         // Update Content Panel
         cref.setArrayToDisplay(array);
