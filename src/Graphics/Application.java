@@ -1,13 +1,13 @@
 package Graphics;
 
 import Algorithms.BubbleSort;
+import Algorithms.MergeSort;
 import Algorithms.SelectionSort;
 import Algorithms.SortAlgs;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 
@@ -149,5 +149,18 @@ public class Application {
         c.gridx = 1;
         c.gridy = 1;
         btnpanel.add(bubble_btn, c);
+
+        // Merge Sort Button
+        JButton merge_btn = new JButton("Merge Sort");
+        merge_btn.setPreferredSize(btn_dimension);
+        merge_btn.addActionListener(e -> {
+            sort = new MergeSort(cpanel);
+            timer = new Timer(500, ex -> visualize());
+            timer.setRepeats(true);
+            timer.start();
+        });
+        c.gridx = 2;
+        c.gridy = 0;
+        btnpanel.add(merge_btn, c);
     }
 }

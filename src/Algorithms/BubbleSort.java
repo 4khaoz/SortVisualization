@@ -39,6 +39,7 @@ public class BubbleSort extends SortAlgs {
             return true;
         }
 
+
         // Comparison
         if (array[pointer] > array[selector])
         {

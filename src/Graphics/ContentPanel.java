@@ -33,12 +33,10 @@ public class ContentPanel extends JPanel implements ActionListener {
 
         for (int i = 0; i < arrayToDisplay.length; i++)
         {
-            g2d.setColor(Color.CYAN);
             int rect_height = (getHeight()/100) * arrayToDisplay[i];
-            int rect_width = 40;
-            int offset_side = 60;
-            int rect_spacing = 100;
+            int rect_width = getWidth() / arrayToDisplay.length;
 
+            g2d.setColor(Color.CYAN);
             // If Sort Visualization in Progress, set Colors
             if (sort != null)
             {
@@ -49,7 +47,6 @@ public class ContentPanel extends JPanel implements ActionListener {
                 }
                 else if (i == sort.getPointer())
                 {
-                    //
                     g2d.setColor(Color.MAGENTA);
                 }
                 else if (i == sort.getSelector())
@@ -57,8 +54,9 @@ public class ContentPanel extends JPanel implements ActionListener {
                     g2d.setColor(Color.RED);
                 }
             }
+
             g2d.fillRect(
-                    rect_spacing * i + offset_side,
+                    rect_width * i,
                     getHeight() - rect_height,
                     rect_width,
                     rect_height
@@ -73,6 +71,6 @@ public class ContentPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       repaint();
+       this.repaint();
     }
 }
