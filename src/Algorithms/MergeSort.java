@@ -81,6 +81,12 @@ public class MergeSort extends SortAlgs {
             j++;
             cref.update(arrayToSort, 100);
         }
+
+        if (input.length == arrayToSort.length)
+        {
+            for (int a = 0; a < input.length; a++)
+                sortedIndices[a] = true;
+        }
         cref.update(arrayToSort, 100);
     }
 
