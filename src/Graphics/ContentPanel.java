@@ -4,19 +4,16 @@ import Algorithms.SortAlgs;
 
 import javax.swing.JPanel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class ContentPanel extends JPanel implements ActionListener {
+public class ContentPanel extends JPanel {
 
     private int[] arrayToDisplay;
     private SortAlgs sort;
 
-
     public ContentPanel()
     {
-        setMinimumSize(new Dimension(1000, 600));
-        setPreferredSize(new Dimension(1200, 600));
+        setMinimumSize(new Dimension(1280, 600));
+        setPreferredSize(new Dimension(1280, 600));
         setBackground(Color.GRAY);
     }
 
@@ -69,8 +66,21 @@ public class ContentPanel extends JPanel implements ActionListener {
         sort = s;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-       this.repaint();
+    public void update(int[] array, long msDelay)
+    {
+        setArrayToDisplay(array);
+
+        delay(msDelay);
+        repaint();
+    }
+
+    private void delay(long msDelay)
+    {
+        repaint();
+        try {
+            Thread.sleep(msDelay);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

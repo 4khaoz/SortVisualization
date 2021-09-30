@@ -2,8 +2,6 @@ package Algorithms;
 
 import Graphics.ContentPanel;
 
-import java.awt.event.ActionEvent;
-
 /**
  * Selection-Sort
  * 1. Iterates through given array to find the smallest unsorted element
@@ -16,59 +14,45 @@ public class SelectionSort extends SortAlgs{
 
     int min;
 
-    public SelectionSort(ContentPanel c)
+    public SelectionSort(ContentPanel c, int[] array)
     {
-        super(c);
-        cref.setSort(this);
-        pointer = 0;
-        selector = 0;
+        super(c, array);
+        c.setSort(this);
     }
 
     /**
-     * Implementation of Selection Sort as a step-by-step task for Timer
-     * Each call of this function is one step of the algorithm
-     * @param array Array to sort
-     * @return true if sort finished, false to continue sort algorithm
+     * Implementation of Selection Sort
+     * @param array array to sort
      */
-    @Override
-    public boolean Iterate(int[] array)
+    private void selectionSort(int[] array)
     {
-        if (iteration >= array.length)
+        // Iterate through array
+        for (iteration = 0; iteration < array.length - 1; iteration++)
         {
-            System.out.println("Finished");
-            return true;
-        }
-
-        // Start Next iteration
-        if (selector == iteration)
-        {
-            min = array[iteration];
+            // Find the minimum in unsorted array
             pointer = iteration;
-        }
+            for (selector = pointer+1; selector < array.length; selector++)
+            {
+                if (array[selector] < array[pointer])
+                    pointer = selector;
 
-        // New minimum Value found
-        if (array[selector] < min)
-        {
-            min = array[selector];
-            pointer = selector;
-        }
+                cref.update(array, 100);
+            }
 
-        selector++;
-
-        // End of iteration, sort
-        if (selector >= array.length)
-        {
-            array[pointer] = array[iteration];
-            array[iteration] = min;
+            // Swap minimum with first unsorted element
+            int temp = array[iteration];
+            array[iteration] = array[pointer];
+            array[pointer] = temp;
             sortedIndices[iteration] = true;
-            iteration++;
-            selector = iteration;
+
+            cref.update(array, 100);
         }
 
-        // Update Content Panel
-        cref.setArrayToDisplay(array);
-        cref.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+        System.out.println("Finished");
+    }
 
-        return false;
+    @Override
+    public void run() {
+        selectionSort(arrayToSort);
     }
 }

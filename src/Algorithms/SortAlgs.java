@@ -2,16 +2,18 @@ package Algorithms;
 
 import Graphics.ContentPanel;
 
-public abstract class SortAlgs {
+public abstract class SortAlgs implements Runnable {
 
     protected ContentPanel cref;
     protected boolean[] sortedIndices;
+    protected int[] arrayToSort;
 
-    public SortAlgs(ContentPanel c)
+    public SortAlgs(ContentPanel c, int[] array)
     {
         cref = c;
+        arrayToSort = array;
         iteration = 0;
-        sortedIndices = new boolean[12];
+        sortedIndices = new boolean[array.length];
     }
 
     /*
@@ -24,10 +26,6 @@ public abstract class SortAlgs {
     protected int iteration;
     protected int pointer;
     protected int selector;
-
-    public int getIteration() {
-        return iteration;
-    }
 
     public int getPointer()
     {
@@ -42,6 +40,4 @@ public abstract class SortAlgs {
     {
         return sortedIndices[i];
     }
-
-    public abstract boolean Iterate(int[] array);
 }

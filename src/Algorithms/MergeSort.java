@@ -2,151 +2,90 @@ package Algorithms;
 
 import Graphics.ContentPanel;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
 
 public class MergeSort extends SortAlgs {
 
-    private int sorted;
-    private ArrayList<Integer> list;
-    private boolean bSplitted;
-    private int lsize;
-    private int rsize;
-
-    public MergeSort(ContentPanel c)
+    public MergeSort(ContentPanel c, int[] array)
     {
-        super(c);
-
-        sorted = 0;
-        bSplitted = false;
-        list = new ArrayList<>();
+        super(c, array);
+        c.setSort(this);
     }
 
-    private boolean mergesort(int[] input)
+    private void mergesort(int[] input, int offset)
     {
-        if (input.length < 2) return false;
+        if (input.length < 2) return;
 
+        // Divide
         int mid = input.length / 2;
 
         int[] left = new int[mid];
         int[] right = new int[input.length - mid];
 
-        for (int i = 0; i < mid; i++)
+        for (int a = 0; a < mid; a++)
         {
-            left[i] = input[i];
+            left[a] = input[a];
         }
-        for (int j = mid; j < input.length; j++)
+        for (int b = mid; b < input.length; b++)
         {
-            right[j - mid] = input[j];
+            right[b - mid] = input[b];
         }
 
-        mergesort(left);
-        mergesort(right);
+        mergesort(left, offset);
+        mergesort(right, mid + offset);
 
 
-        int i = 0, j= 0, k = 0;
+        // Merge
+        int i = 0, j = 0, k = 0;
         while (i < left.length && j < right.length)
         {
+            pointer = k + offset;
+            selector = k + offset;
+
             if (left[i] <= right[j])
             {
                 input[k] = left[i];
+                arrayToSort[k + offset] = left[i];
+                pointer += i;
                 i++;
             }
             else
             {
                 input[k] = right[j];
+                arrayToSort[k + offset] = right[j];
+                selector += j;
                 j++;
             }
             k++;
+
+            cref.update(arrayToSort, 100);
         }
+
         while (i < left.length)
         {
             input[k] = left[i];
+            arrayToSort[k + offset] = left[i];
+            pointer = k + i + offset;
             k++;
             i++;
+            cref.update(arrayToSort, 100);
         }
         while (j < right.length)
         {
             input[k] = right[j];
+            arrayToSort[k + offset] = right[j];
+            selector = k + j + offset;
             k++;
             j++;
+            cref.update(arrayToSort, 100);
         }
-        System.out.println(Arrays.toString(input));
-        return true;
+        cref.update(arrayToSort, 100);
     }
 
     @Override
-    public boolean Iterate(int[] array) {
-        System.out.println("Array: " + Arrays.toString(array));
-        if (sorted >= array.length)
-        {
-            System.out.println("Array: " + Arrays.toString(array));
-            return true;
-        }
-
-        if (!bSplitted)
-        {
-            int len = array.length;
-            do {
-                len = len/2;
-                list.add(len);
-            }
-            while (len > 1);
-            bSplitted = true;
-            System.out.println(Arrays.toString(list.toArray()));
-        }
-
-        if (list.size() > iteration)
-        {
-            lsize = list.get(list.size() - 1 - iteration);
-            rsize = list.get(list.size() - 2 - iteration);
-        }
-
-
-        int[] left = new int[lsize];
-        int[] right = new int[array.length -1];
-
-        for (int i = 0; i < lsize; i++)
-        {
-            left[i] = array[i];
-        }
-        for (int j = lsize; j < rsize; j++)
-        {
-            right[j - lsize] = array[j];
-        }
-
-        // Merge Process
-        pointer = 0;
-        selector = 0;
-        if (left[pointer] <= right[selector])
-        {
-            array[sorted] = left[pointer];
-            pointer++;
-        }
-        else
-        {
-            array[sorted] = right[selector];
-            selector++;
-        }
-        sorted++;
-
-        /*
-
-        while (pointer < left.length)
-        {
-            array[sorted] = left[pointer];
-            sorted++;
-            pointer++;
-        }
-        while (selector < right.length)
-        {
-            array[sorted] = right[selector];
-            sorted++;
-            selector++;
-        }
-         */
-
-        return false;
+    public void run() {
+        mergesort(arrayToSort, 0);
     }
 }

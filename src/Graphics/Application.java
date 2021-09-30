@@ -13,16 +13,15 @@ import java.util.Arrays;
 
 public class Application {
 
+    /* Default variables */
+    private static final int WINDOW_WIDTH = 1280;
+    private static final int WINDOW_HEIGHT = 720;
+
     private final ContentPanel cpanel;
     private final JPanel btnpanel;
 
     /* Utilities */
-    private Timer timer;
-    private SortAlgs sort;
-
-    /* Default variables */
-    private static final int window_width = 1280;
-    private static final int window_height = 720;
+    private Thread sortThread;
 
     /* Array */
     private final int[] array;
@@ -31,7 +30,7 @@ public class Application {
     {
         JFrame window = new JFrame();
         window.setTitle("Visualization");
-        window.setSize(window_width, window_height);
+        window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         window.setVisible(true);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.getContentPane().setLayout(new BoxLayout(window.getContentPane(), BoxLayout.PAGE_AXIS));
@@ -40,7 +39,7 @@ public class Application {
         cpanel = new ContentPanel();
         btnpanel = new JPanel(new GridBagLayout());
 
-        array = new int[12];
+        array = new int[36];
         generateRandomArray();
         cpanel.setArrayToDisplay(array);
 
@@ -48,14 +47,6 @@ public class Application {
         window.add(btnpanel);
 
         setupButtons();
-    }
-
-    /**
-     * Trigger ActionListener to update ContentPanel
-     */
-    public void updateCPanel()
-    {
-        cpanel.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
     }
 
     /**
@@ -71,19 +62,8 @@ public class Application {
         }
         cpanel.setSort(null);
         System.out.println(Arrays.toString(array));
-        updateCPanel();
-    }
-
-    /**
-     * This method iterates the Visualization of the sorting algorithm
-     * Should only be called by ActionListener through Button-Click
-     */
-    private void visualize()
-    {
-        if (sort.Iterate(array))
-        {
-            timer.stop();
-        }
+        cpanel.setArrayToDisplay(array);
+        cpanel.repaint();
     }
 
     /**
@@ -91,12 +71,7 @@ public class Application {
      */
     private void stopVisualization()
     {
-        if (timer != null)
-        {
-            timer.stop();
-        }
         cpanel.setArrayToDisplay(array);
-        updateCPanel();
     }
 
     private void setupButtons()
@@ -128,10 +103,8 @@ public class Application {
         JButton selection_btn = new JButton("Selection Sort");
         selection_btn.setPreferredSize(btn_dimension);
         selection_btn.addActionListener(e -> {
-            sort = new SelectionSort(cpanel);
-            timer = new Timer(500, ex -> visualize());
-            timer.setRepeats(true);
-            timer.start();
+            sortThread = new Thread(new SelectionSort(cpanel, array));
+            sortThread.start();
         });
         c.gridx = 1;
         c.gridy = 0;
@@ -141,10 +114,8 @@ public class Application {
         JButton bubble_btn = new JButton("Bubble Sort");
         bubble_btn.setPreferredSize(btn_dimension);
         bubble_btn.addActionListener(e -> {
-            sort = new BubbleSort(cpanel);
-            timer = new Timer(500, ex -> visualize());
-            timer.setRepeats(true);
-            timer.start();
+            sortThread = new Thread(new BubbleSort(cpanel, array));
+            sortThread.start();
         });
         c.gridx = 1;
         c.gridy = 1;
@@ -154,10 +125,8 @@ public class Application {
         JButton merge_btn = new JButton("Merge Sort");
         merge_btn.setPreferredSize(btn_dimension);
         merge_btn.addActionListener(e -> {
-            sort = new MergeSort(cpanel);
-            timer = new Timer(500, ex -> visualize());
-            timer.setRepeats(true);
-            timer.start();
+            sortThread = new Thread(new MergeSort(cpanel, array));
+            sortThread.start();
         });
         c.gridx = 2;
         c.gridy = 0;

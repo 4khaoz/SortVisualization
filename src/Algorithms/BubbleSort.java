@@ -16,9 +16,9 @@ public class BubbleSort extends SortAlgs {
 
     private boolean sorted;
 
-    public BubbleSort(ContentPanel c)
+    public BubbleSort(ContentPanel c, int[] array)
     {
-        super(c);
+        super(c, array);
         cref.setSort(this);
         pointer = 0;
         selector = 1;
@@ -26,11 +26,30 @@ public class BubbleSort extends SortAlgs {
     }
 
     /**
-     * Implementation of Bubble Sort as a step-by-step task for Timer
-     * Each call of this function is one step of the algorithm
+     * Implementation of Bubble Sort
      * @param array Array to sort
-     * @return true if sort finished, false to continue sort algorithm
      */
+    private void bubbleSort(int[] array)
+    {
+        for (iteration = 0; iteration < array.length; iteration++)
+        {
+            for (pointer = 0; pointer < array.length - iteration - 1; pointer++)
+            {
+                selector = pointer + 1;
+                if (array[pointer] > array[selector])
+                {
+                    int temp = array[pointer];
+                    array[pointer] = array[selector];
+                    array[selector] = temp;
+                }
+                cref.update(array, 100);
+            }
+            sortedIndices[array.length - iteration - 1] = true;
+        }
+        cref.update(array, 100);
+    }
+
+    /*
     @Override
     public boolean Iterate(int[] array) {
         if (sorted)
@@ -67,8 +86,14 @@ public class BubbleSort extends SortAlgs {
 
         // Update Content Panel
         cref.setArrayToDisplay(array);
-        cref.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
 
         return false;
+    }
+
+     */
+
+    @Override
+    public void run() {
+        bubbleSort(arrayToSort);
     }
 }
